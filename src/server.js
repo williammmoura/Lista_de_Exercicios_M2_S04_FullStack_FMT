@@ -1,7 +1,9 @@
 const express = require("express")
 const server = express()
 
-
+//Midllewere
+server.use(express.json())
+server.use(rotasDoServidor)
 
 // Iniciando o servidor
 server.listen(3333)
