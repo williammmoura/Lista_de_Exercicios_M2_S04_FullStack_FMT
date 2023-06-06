@@ -1,5 +1,7 @@
-const lista = ['Pedro', 'José', 'Aderbal', 'Danilo', 'Luisa', 'Vitoria'];
+const fs = require('fs')
 const { trocarPosicao } = require('../utils')
+
+const lista = ['Pedro', 'José', 'Aderbal', 'Danilo', 'Luisa', 'Vitoria'];
 
 //Exercício 02
 async function reordenarLista(requisicao, resposta) {
@@ -35,6 +37,28 @@ async function reordenarLista(requisicao, resposta) {
     resposta.json(newList);
 }
 
+//Exercício 03
+const salvarDado = (requisicao, resposta) => {
+    const { item } = requisicao.body;
+
+    // Lê o conteúdo do arquivo (se existir)
+    let data = [];
+    // Verificando se o arquivo existe usando a função fs.existsSync(). Se existir, lemos o conteúdo do arquivo utilizando fs.readFileSync() e convertemos o conteúdo de volta em um array de objetos usando JSON.parse().
+    if (fs.existsSync('dados.json')) {
+        const fileContent = fs.readFileSync('dados.json', 'utf-8');
+        data = JSON.parse(fileContent);
+    }
+
+    // Adiciona o novo item no array
+    data.push({ item });
+
+    // Salva o conteúdo atualizado no arquivo
+    fs.writeFileSync('dados.json', JSON.stringify(data));
+
+    resposta.json(data);
+};
+
 module.exports = {
     reordenarLista,
+    salvarDado
 };
