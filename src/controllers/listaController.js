@@ -1,6 +1,7 @@
 const lista = ['Pedro', 'José', 'Aderbal', 'Danilo', 'Luisa', 'Vitoria'];
 const { trocarPosicao } = require('../utils')
 
+//Exercício 02
 async function reordenarLista(requisicao, resposta) {
     const { listaNomes } = requisicao.body;
 
