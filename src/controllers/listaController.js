@@ -37,7 +37,7 @@ async function reordenarLista(requisicao, resposta) {
     resposta.json(newList);
 }
 
-//Exercício 03
+//Exercício 04
 const salvarDado = (requisicao, resposta) => {
     const { item } = requisicao.body;
 
@@ -58,7 +58,42 @@ const salvarDado = (requisicao, resposta) => {
     resposta.json(data);
 };
 
+//Exercício 05
+const filtrarUsuarios = (requisicao, resposta) => {
+const { ageMin, ageMax, state, job } = requisicao.query;
+
+fs.readFile(userFilePath, 'utf8', (err, data) => {
+    // Verificando se ocorreu algum erro durante a leitura do arquivo. 
+    if (err) {
+        console.error(err);
+        return resposta.status(500).json({ error: 'Erro ao ler o arquivo de usuários' });
+    }
+
+    let usuarios = JSON.parse(data);
+
+    // Verificando se o critério ageMin, ageMax, state e job estam definido. Se estiver, aplicamos um filtro no array usuarios utilizando o método filter().
+    if (ageMin) {
+        usuarios = usuarios.filter((usuario) => usuario.age >= parseInt(ageMin));
+    }
+
+    if (ageMax) {
+        usuarios = usuarios.filter((usuario) => usuario.age <= parseInt(ageMax));
+    }
+
+    if (state) {
+        usuarios = usuarios.filter((usuario) => usuario.state.toLowerCase() === state.toLowerCase());
+    }
+
+    if (job) {
+        usuarios = usuarios.filter((usuario) => usuario.job.toLowerCase() === job.toLowerCase());
+    }
+
+    resposta.json(usuarios);
+    });
+};
+
 module.exports = {
     reordenarLista,
-    salvarDado
+    salvarDado,
+    filtrarUsuarios
 };
