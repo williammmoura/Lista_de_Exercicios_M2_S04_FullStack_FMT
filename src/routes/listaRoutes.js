@@ -8,6 +8,7 @@ router.patch('/', listaController.reordenarLista)
 router.get('/datas/:mes', datasController.listarDatas)
 router.post('/salvarDado', listaController.salvarDado)
 router.get('/listarUsuarios', listaController.filtrarUsuarios)
+router.put('/:id', listaController.alterarUsuario)
 
 
 module.exports = router
