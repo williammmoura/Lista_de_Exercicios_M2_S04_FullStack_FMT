@@ -138,14 +138,14 @@ const alterarUsuario = (requisicao, resposta) => {
 
 
 //Exercício 07
-const deletarRoteiro = (req, res) => {
-    const { id } = req.params
+const deletarRoteiro = (requisicao, res) => {
+    const { id } = requisicao.params
 
     fs.readFile(roteirosFilePath, 'utf8', (err, data) => {
         // Verificando se ocorreu algum erro durante a leitura do arquivo. Se houver um erro, ele é exibido no console e uma resposta de erro com status 500 é enviada ao cliente.
         if (err) {
             console.error(err)
-            return res.status(500).json({ error: 'Erro ao ler o arquivo de roteiros' })
+            return resposta.status(500).json({ error: 'Erro ao ler o arquivo de roteiros' })
         }
 
         let roteiros = JSON.parse(data)
@@ -163,12 +163,37 @@ const deletarRoteiro = (req, res) => {
             // Verifica se ocorreu algum erro durante a escrita do arquivo.
             if (err) {
             console.error(err)
-            return res.status(500).json({ error: 'Erro ao escrever no arquivo de roteiros' })
+            return resposta.status(500).json({ error: 'Erro ao escrever no arquivo de roteiros' })
         }
 
-            res.json({ mensagem: 'Roteiro deletado com sucesso' })
+            resposta.json({ mensagem: 'Roteiro deletado com sucesso' })
         })
     })
+}
+
+
+//Exercício 08
+const obterNomeUsuario = (requisicao, resposta) => {
+    const { id } = requisicao.params
+
+    fs.readFile(userFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err)
+            return resposta.status(500).json({ error: 'Erro ao ler o arquivo de usuários' })
+        }
+
+        const usuarios = JSON.parse(data)
+
+        const usuario = usuarios.find((user) => user.id === parseInt(id))
+
+        if (!usuario) {
+            return resposta.status(404).json({ mensagem: 'Usuário não encontrado' })
+        }
+
+        const nomeUsuario = usuario.name
+
+        resposta.json({ nome: nomeUsuario })
+    });
 }
 
 
@@ -177,5 +202,6 @@ module.exports = {
     salvarDado,
     filtrarUsuarios,
     alterarUsuario,
-    deletarRoteiro
+    deletarRoteiro,
+    obterNomeUsuario
 };
