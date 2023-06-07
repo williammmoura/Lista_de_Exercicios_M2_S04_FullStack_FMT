@@ -137,9 +137,45 @@ const alterarUsuario = (requisicao, resposta) => {
 }
 
 
+//Exercício 07
+const deletarRoteiro = (req, res) => {
+    const { id } = req.params
+
+    fs.readFile(roteirosFilePath, 'utf8', (err, data) => {
+        // Verificando se ocorreu algum erro durante a leitura do arquivo. Se houver um erro, ele é exibido no console e uma resposta de erro com status 500 é enviada ao cliente.
+        if (err) {
+            console.error(err)
+            return res.status(500).json({ error: 'Erro ao ler o arquivo de roteiros' })
+        }
+
+        let roteiros = JSON.parse(data)
+
+        const index = roteiros.findIndex((roteiro) => roteiro.id === parseInt(id))
+
+        // Verifica se o índice é igual a -1, o que indica que o roteiro não foi encontrado.
+        if (index === -1) {
+            return res.status(404).json({ mensagem: 'Roteiro não encontrado' })
+        }
+
+        roteiros.splice(index, 1)
+
+        fs.writeFile(roteirosFilePath, JSON.stringify(roteiros, null, 2), 'utf8', (err) => {
+            // Verifica se ocorreu algum erro durante a escrita do arquivo.
+            if (err) {
+            console.error(err)
+            return res.status(500).json({ error: 'Erro ao escrever no arquivo de roteiros' })
+        }
+
+            res.json({ mensagem: 'Roteiro deletado com sucesso' })
+        })
+    })
+}
+
+
 module.exports = {
     reordenarLista,
     salvarDado,
     filtrarUsuarios,
-    alterarUsuario
+    alterarUsuario,
+    deletarRoteiro
 };
