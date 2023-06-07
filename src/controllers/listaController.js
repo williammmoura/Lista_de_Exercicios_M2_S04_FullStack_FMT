@@ -197,11 +197,33 @@ const obterNomeUsuario = (requisicao, resposta) => {
 }
 
 
+//Exercício 09
+const converterLetras = (requisicao, resposta) => {
+    const { item } = requisicao.body;
+    // Verificando se o campo 'item' não é uma string. Se for o caso, uma resposta com status 400
+    if (typeof item !== 'string') {
+        return resposta.status(400).json({ mensagem: 'A entrada deve ser uma string' });
+    }
+
+    // Convertendo as letras minúsculas em maiúsculas e vice-versa. A função split('') divide a string em um array de caracteres. O método map() itera sobre cada caractere e verifica se é maiúsculo ou minúsculo para fazer a conversão.
+    const itemConvertido = item.split('').map((letra) => {        
+        if (letra === letra.toUpperCase()) {
+        return letra.toLowerCase();
+        } else {
+        return letra.toUpperCase();
+        }
+    }).join('');
+
+    resposta.json({ item: itemConvertido });
+    };
+
+
 module.exports = {
     reordenarLista,
     salvarDado,
     filtrarUsuarios,
     alterarUsuario,
     deletarRoteiro,
-    obterNomeUsuario
+    obterNomeUsuario,
+    converterLetras,
 };
